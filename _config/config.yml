@@ -16,3 +16,13 @@ SilverStripe\Core\Injector\Injector:
         default: '%$Firesphere\GraphQLJWT\Extensions\ExtendedMemberAuthenticator'
 Firesphere\GraphQLJWT\Extensions\MemberExtension:
   requires_user_activation: true
+
+---
+Name: firesphere-jwt-middleware
+After: "#session-manager-middleware"
+---
+SilverStripe\Core\Injector\Injector:
+  SilverStripe\Control\Director:
+    properties:
+      Middlewares:
+        LoginSessionMiddleware: '%$Firesphere\GraphQLJWT\Middleware\JWTLoginSessionMiddleware'

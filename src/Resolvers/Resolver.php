@@ -303,7 +303,13 @@ class Resolver
         // Create new token from this member
         $authenticator = Injector::inst()->get(JWTAuthenticator::class);
         $token = $authenticator->generateToken($request, $member);
-        return static::generateResponse(self::STATUS_OK, $member, $token->toString());
+
+        /** @var JWTRecord $record */
+        list($record, $status) = $authenticator->validateToken($token->toString(), $request);
+        if ($status === self::STATUS_OK) {
+            return static::generateResponse($status, $record->Member(), $token->toString());
+        }
+        return static::generateResponse($status, null, null);
     }
 
     /**

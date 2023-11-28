@@ -18,6 +18,10 @@ use SilverStripe\Security\Security;
 use SilverStripe\SessionManager\Models\LoginSession;
 use SilverStripe\ORM\FieldType\DBDatetime;
 use SilverStripe\SessionManager\Security\LogInAuthenticationHandler;
+use SilverStripe\ORM\ValidationResult;
+use SilverStripe\ORM\ValidationException;
+
+
 
 /**
  * Class JWTAuthenticationHandler
@@ -44,15 +48,16 @@ class JWTAuthenticationHandler implements AuthenticationHandler
             return null;
         }
 
-        // Validate the token. This is critical for security
-        $member = Injector::inst()->get(JWTAuthenticator::class)
-            ->authenticate(['token' => $token], $request);
+        $result = ValidationResult::create();
 
-        if ($member) {
-            $this->logIn($member, false, $request);
+        // Validate the token. This is critical for security
+        $member = Injector::inst()->get(JWTAuthenticator::class)->authenticate(['token' => $token], $request, $result);
+
+        if ($member && $result->isValid()) {
+            return $member;
         }
 
-        return $member;
+        throw new ValidationException($result, 401);
     }
 
     /**
