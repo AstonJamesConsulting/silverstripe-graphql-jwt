@@ -33,8 +33,10 @@ class ErrorMessageGenerator
         return _t('JWT.STATUS_OK', 'Token is ok');
       case Resolver::STATUS_INACTIVATED_USER:
         return _t('JWT.STATUS_INACTIVATED_USER', 'User is not activated');
+      case Resolver::STATUS_DOESNT_EXIST:
+        return _t('JWT.STATUS_DOESNT_EXIST', 'Token could not be found');
       default:
-        throw new InvalidArgumentException("Invalid status");
+        return "Unknown error: " . $status;
     }
   }
 

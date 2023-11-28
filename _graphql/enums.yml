@@ -18,3 +18,9 @@ TokenStatus:
     BAD_LOGIN:
       value: BAD_LOGIN
       description: JWT token could not be created due to invalid login credentials
+    DOESNT_EXIST:
+      value: DOESNT_EXIST
+      description: JWT record does not exist or could not be found
+    BAD_PARSE:
+      value: BAD_PARSE
+      description: Token could not be parsed

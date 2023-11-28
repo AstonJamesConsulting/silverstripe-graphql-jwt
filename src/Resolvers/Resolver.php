@@ -59,6 +59,16 @@ class Resolver
     const STATUS_DEAD = 'DEAD';
 
     /**
+     * Could not be parsed
+     */
+    const STATUS_BAD_PARSE = "BAD_PARSE";
+
+    /**
+     * JWTRecord does not exist
+     */
+    const STATUS_DOESNT_EXIST = "DOESNT_EXIST";
+
+    /**
      * Inactivated users cannot login
      */
     const STATUS_INACTIVATED_USER = 'INACTIVE_USER';

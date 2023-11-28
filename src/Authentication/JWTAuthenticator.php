@@ -448,14 +448,14 @@ class JWTAuthenticator extends MemberAuthenticator
         // Parse token
         $parsedToken = $this->parseToken($token);
         if (!$parsedToken) {
-            return [null, Resolver::STATUS_INVALID];
+            return [null, Resolver::STATUS_BAD_PARSE];
         }
 
         // Find local record for this token
         /** @var JWTRecord $record */
         $record = JWTRecord::get()->byID($parsedToken->claims()->get('rid'));
         if (!$record) {
-            return [null, Resolver::STATUS_INVALID];
+            return [null, Resolver::STATUS_DOESNT_EXIST];
         }
 
         // Check if token is reset-token
