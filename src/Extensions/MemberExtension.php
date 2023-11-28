@@ -52,8 +52,8 @@ class MemberExtension extends DataExtension
     public function updateCMSFields(FieldList $fields)
     {
         $fields->removeByName('AuthTokens');
-        $fields->removeByName('ResetToken');
-        $fields->removeByName('SignupToken');
+        $fields->removeByName('ResetTokenID');
+        $fields->removeByName('SignupTokenID');
 
         if (!$this->config()->get('requires_user_activation')) {
             $fields->removeByName('isActivated');
