@@ -65,25 +65,6 @@ class JWTAuthenticationHandler implements AuthenticationHandler
      */
     public function logIn(Member $member, $persistent = false, HTTPRequest $request = null): void
     {
-
-        // TODO: Refactor to make stateless
-        // Fixes: LoginSessionMiddleware logs out user on token validation
-        // See https://github.com/Firesphere/silverstripe-graphql-jwt/issues/36
-        $loginHandler = Injector::inst()->get(LogInAuthenticationHandler::class);
-
-        $loginSession =  LoginSession::find($member, $request);
-        if (!$loginSession) {
-            $loginSession = LoginSession::generate($member, $persistent, $request);
-        }
-
-        $loginSession->LastAccessed = DBDatetime::now()->Rfc2822();
-        $loginSession->IPAddress = $request ? $request->getIP() : '';
-        $loginSession->write();
-
-        if ($request) {
-            $request->getSession()->set($loginHandler->getSessionVariable(), $loginSession->ID);
-        }
-
         Security::setCurrentUser($member);
     }
 
@@ -99,7 +80,6 @@ class JWTAuthenticationHandler implements AuthenticationHandler
         if ($member) {
             $member->destroyAuthTokens();
         }
-
         Security::setCurrentUser(null);
     }
 }
