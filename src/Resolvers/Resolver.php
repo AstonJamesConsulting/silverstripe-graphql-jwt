@@ -248,11 +248,11 @@ class Resolver
      * @throws OutOfBoundsException
      * @throws Exception
      */
-    public static function resolveRefreshToken(): array
+    public static function resolveRefreshToken($object, array $args): array
     {
         $authenticator = Injector::inst()->get(JWTAuthenticator::class);
         $request = Controller::curr()->getRequest();
-        $token = static::getAuthorizationHeader($request);
+        $token = $args['token'];
 
         // Check status of existing token
         /** @var JWTRecord $record */

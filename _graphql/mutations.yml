@@ -1,4 +1,4 @@
-refreshToken:
+"refreshToken(token: String!)":
   type: MemberToken
   description: Refreshes a JWT token for a valid user. To be done
 "createToken(email: String!, password: String)":
