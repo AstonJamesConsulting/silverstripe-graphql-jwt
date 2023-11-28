@@ -218,7 +218,7 @@ class Resolver
         }
 
         $member = Member::get()->filter('Email', $email)->first();
-        if (!$member || $member->isActivated) {
+        if (!$member || !$member->requiresActivation()) {
             return static::generateResultResponse(self::RESULT_OK);
         }
 

@@ -8,6 +8,7 @@ use Firesphere\GraphQLJWT\Model\JWTRecord;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\ORM\DataExtension;
 use SilverStripe\ORM\HasManyList;
+use SilverStripe\Core\Config\Configurable;
 use SilverStripe\Security\Member;
 use stdClass;
 
@@ -20,6 +21,9 @@ use stdClass;
  */
 class MemberExtension extends DataExtension
 {
+    use Configurable;
+
+
     /**
      * List of names of extra subject fields to add to JWT token
      *
@@ -50,6 +54,10 @@ class MemberExtension extends DataExtension
         $fields->removeByName('AuthTokens');
         $fields->removeByName('ResetToken');
         $fields->removeByName('SignupToken');
+
+        if (!$this->config()->get('requires_user_activation')) {
+            $fields->removeByName('isActivated');
+        }
     }
 
     /**
@@ -99,5 +107,11 @@ class MemberExtension extends DataExtension
     public function deActivate(){
         $this->owner->isActivated = false;
         $this->owner->write();
+    }
+
+    public function requiresActivation()
+    {
+      if(!$this->config()->get('requires_user_activation')) return false;
+      return !$this->owner->isActivated;
     }
 }

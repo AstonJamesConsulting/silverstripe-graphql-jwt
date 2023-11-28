@@ -14,3 +14,5 @@ SilverStripe\Core\Injector\Injector:
     properties:
       Authenticators:
         default: '%$Firesphere\GraphQLJWT\Extensions\ExtendedMemberAuthenticator'
+Firesphere\GraphQLJWT\Extensions\MemberExtension:
+  requires_user_activation: true
