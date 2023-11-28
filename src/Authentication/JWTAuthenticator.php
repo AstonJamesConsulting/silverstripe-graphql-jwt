@@ -26,6 +26,7 @@ use Lcobucci\JWT\Signer\Key\InMemory;
 use Lcobucci\JWT\Signer\Rsa;
 use Lcobucci\JWT\Token;
 use Lcobucci\JWT\UnencryptedToken;
+use Lcobucci\JWT\Validation\Constraint\SignedWith;
 use Lcobucci\JWT\Validation\Constraint\IdentifiedBy;
 use Lcobucci\JWT\Validation\Constraint\IssuedBy;
 use Lcobucci\JWT\Validation\Constraint\PermittedFor;
@@ -594,6 +595,7 @@ class JWTAuthenticator extends MemberAuthenticator
         // @todo - upgrade
         // @see https://lcobucci-jwt.readthedocs.io/en/latest/upgrading/#replace-tokenverify-and-tokenvalidate-with-validation-api
         $this->config->setValidationConstraints(
+            new SignedWith($this->getSigner(), $this->getPrivateKey()),
             new IssuedBy(...$this->getAllowedDomains()),
             new PermittedFor(Director::absoluteBaseURL()),
             new IdentifiedBy($record->UID),
