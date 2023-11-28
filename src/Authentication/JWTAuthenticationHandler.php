@@ -15,6 +15,9 @@ use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Security\AuthenticationHandler;
 use SilverStripe\Security\Member;
 use SilverStripe\Security\Security;
+use SilverStripe\SessionManager\Models\LoginSession;
+use SilverStripe\ORM\FieldType\DBDatetime;
+use SilverStripe\SessionManager\Security\LogInAuthenticationHandler;
 
 /**
  * Class JWTAuthenticationHandler
@@ -46,7 +49,7 @@ class JWTAuthenticationHandler implements AuthenticationHandler
             ->authenticate(['token' => $token], $request);
 
         if ($member) {
-            $this->logIn($member);
+            $this->logIn($member, false, $request);
         }
 
         return $member;
@@ -62,6 +65,25 @@ class JWTAuthenticationHandler implements AuthenticationHandler
      */
     public function logIn(Member $member, $persistent = false, HTTPRequest $request = null): void
     {
+
+        // TODO: Refactor to make stateless
+        // Fixes: LoginSessionMiddleware logs out user on token validation
+        // See https://github.com/Firesphere/silverstripe-graphql-jwt/issues/36
+        $loginHandler = Injector::inst()->get(LogInAuthenticationHandler::class);
+
+        $loginSession =  LoginSession::find($member, $request);
+        if (!$loginSession) {
+            $loginSession = LoginSession::generate($member, $persistent, $request);
+        }
+
+        $loginSession->LastAccessed = DBDatetime::now()->Rfc2822();
+        $loginSession->IPAddress = $request ? $request->getIP() : '';
+        $loginSession->write();
+
+        if ($request) {
+            $request->getSession()->set($loginHandler->getSessionVariable(), $loginSession->ID);
+        }
+
         Security::setCurrentUser($member);
     }
 
