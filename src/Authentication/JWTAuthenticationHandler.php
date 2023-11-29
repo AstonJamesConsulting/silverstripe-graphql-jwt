@@ -20,7 +20,7 @@ use SilverStripe\ORM\FieldType\DBDatetime;
 use SilverStripe\SessionManager\Security\LogInAuthenticationHandler;
 use SilverStripe\ORM\ValidationResult;
 use SilverStripe\ORM\ValidationException;
-
+use SilverStripe\GraphQL\QueryHandler\QueryException;
 
 
 /**
@@ -40,7 +40,7 @@ class JWTAuthenticationHandler implements AuthenticationHandler
      * @throws BadMethodCallException
      * @throws Exception
      */
-    public function authenticateRequest(HTTPRequest $request): ?Member
+    public function authenticateRequest(HTTPRequest $request)
     {
         // Check token
         $token = $this->getAuthorizationHeader($request);
@@ -52,12 +52,11 @@ class JWTAuthenticationHandler implements AuthenticationHandler
 
         // Validate the token. This is critical for security
         $member = Injector::inst()->get(JWTAuthenticator::class)->authenticate(['token' => $token], $request, $result);
+        $request['auth_error'] = $result;
 
         if ($member && $result->isValid()) {
             return $member;
         }
-
-        throw new ValidationException($result, 401);
     }
 
     /**
