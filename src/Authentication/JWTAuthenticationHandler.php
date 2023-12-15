@@ -54,7 +54,7 @@ class JWTAuthenticationHandler implements AuthenticationHandler
         $member = Injector::inst()->get(JWTAuthenticator::class)->authenticate(['token' => $token], $request, $result);
         $request['auth_error'] = $result;
 
-        if ($member && $result->isValid()) {
+        if ($member->ID && $result->isValid()) {
             return $member;
         }
     }
