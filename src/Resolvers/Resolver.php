@@ -127,7 +127,7 @@ class Resolver
     list($record, $status) = $authenticator->validateToken($token, $request);
     $member = $status === self::STATUS_OK ? $record->Member() : null;
 
-    if ($member->isPasswordExpired()) {
+    if ($member && $member->isPasswordExpired()) {
       return null;
     }
     
