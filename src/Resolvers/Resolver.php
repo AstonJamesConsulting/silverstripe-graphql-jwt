@@ -126,6 +126,11 @@ class Resolver
     /** @var JWTRecord $record */
     list($record, $status) = $authenticator->validateToken($token, $request);
     $member = $status === self::STATUS_OK ? $record->Member() : null;
+
+    if ($member->isPasswordExpired()) {
+      return null;
+    }
+    
     return static::generateResponse($status, $member, $token);
   }
 
