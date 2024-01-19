@@ -37,6 +37,8 @@ class ErrorMessageGenerator
         return _t('JWT.STATUS_BAD_PARSE', 'Invalid token. Token could not be parsed');
       case Resolver::STATUS_DOESNT_EXIST:
         return _t('JWT.STATUS_DOESNT_EXIST', 'Token could not be found');
+      case Resolver::RESULT_PASSWORD_EXPIRED:
+        return _t('JWT.RESULT_PASSWORD_EXPIRED', 'Your password has expired. Please reset it');
       default:
         return "Unknown error: " . $status;
     }

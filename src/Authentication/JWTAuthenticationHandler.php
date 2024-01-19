@@ -56,6 +56,10 @@ class JWTAuthenticationHandler implements AuthenticationHandler
 
         if (!$member) return false;
 
+        if ($member->isPasswordExpired()) {
+          return null;
+        }
+
         if ($member->ID && $result->isValid()) {
             return $member;
         }

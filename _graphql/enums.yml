@@ -24,3 +24,6 @@ TokenStatus:
     BAD_PARSE:
       value: BAD_PARSE
       description: Token could not be parsed
+    PASSWORD_EXPIRED:
+      value: PASSWORD_EXPIRED
+      description: Your password has expired. Please reset it
