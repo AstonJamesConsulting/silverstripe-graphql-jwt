@@ -38,4 +38,4 @@ SilverStripe\Core\Injector\Injector:
     properties:
       Middlewares:
         csrf: false
-        auth: '%$Firesphere\GraphQLJWT\Middleware\JWTGraphQLMiddleware'
+        # auth: '%$Firesphere\GraphQLJWT\Middleware\JWTGraphQLMiddleware'

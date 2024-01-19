@@ -61,6 +61,22 @@ SilverStripe\GraphQL\Schema\Schema:
       Controller: '%$SilverStripe\GraphQL\Controller.frontend'
 ```
 
+To validate tokens (and throw) during middleware add the `JWTGraphQLMiddleware` extension. This extends QueryMiddleware and will throw a graphQL error with a corresponding message for invalid tokens. This is not needed if you are validing requests yourself (e.g. by checking `Security::getCurrentUser()`) in your resolvers - which will allow you validate nodes seperately and still return unauthenticated data.
+
+```yml
+---
+Name: my-graphql-middleware
+After: 'firesphere-graphql-middlewares'
+---
+
+SilverStripe\Core\Injector\Injector:
+  SilverStripe\GraphQL\QueryHandler\QueryHandlerInterface:
+    class: SilverStripe\GraphQL\QueryHandler\QueryHandler
+    properties:
+      Middlewares:
+        auth: '%$Firesphere\GraphQLJWT\Middleware\JWTGraphQLMiddleware'
+
+```
 
 ## Log in
 

@@ -21,7 +21,7 @@ class JWTGraphQLMiddleware implements QueryMiddleware
 
     if ($auth && !$auth->isValid()) {
       foreach ($auth->getMessages() as $code => $error) {
-        throw new Exception($code . ": " .  $error['message']);
+        throw new Exception($error['message']);
       }
     }
     return $next($schema, $query, $context, $vars);
